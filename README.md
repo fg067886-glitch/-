@@ -2,66 +2,27 @@
 
 ชุดเครื่องมือปรับแต่งประสิทธิภาพเกมระดับพรีเมียม (Premium Game Enhancement Utility)
 
-## วิธีการติดตั้งบน GitHub (How to Deploy to GitHub)
+## วิธีการทำให้ลิงก์ใช้งานได้บน GitHub (How to Fix White Screen)
 
-หากคุณนำโค้ดนี้ไปใส่ใน GitHub และพบปัญหาหน้าจอขาว (White Screen) ให้ทำตามขั้นตอนดังนี้:
+หากคุณใช้โปรเจกต์นี้บน GitHub และพบปัญหาหน้าจอขาว ให้ทำดังนี้:
 
-### 1. วิธีการ Deploy ผ่าน GitHub Pages
-เนื่องจากโปรเจกต์นี้ใช้ **Vite**, คุณไม่สามารถแค่ลากไฟล์ขึ้นไปแล้วเปิดได้เลย คุณต้องทำการ Build ก่อน
+1.  **Push โค้ดทั้งหมดขึ้น GitHub** (ต้องมีโฟลเดอร์ `.github/workflows` ที่ผมสร้างให้)
+2.  ไปที่หน้า Repository ของคุณใน GitHub
+3.  คลิกที่ **Settings** (รูปฟันเฟือง)
+4.  เลือกเมนู **Pages** ทางด้านซ้าย
+5.  ในส่วน **Build and deployment** > **Source** ให้เลือกเป็น **GitHub Actions**
+6.  กลับไปดูที่แท็บ **Actions** ด้านบน คุณจะเห็นสถานะการ Build
+7.  เมื่อ Build เสร็จ ลิงก์ที่ GitHub ให้มาจะใช้งานได้ทันที 100% ครับ
 
-#### วิธีที่ง่ายที่สุด (ใช้ GitHub Actions):
-1. ไปที่เมนู **Settings** ใน Repository ของคุณ
-2. เลือกเมนู **Pages** ทางด้านซ้าย
-3. ในส่วนของ **Build and deployment** > **Source**, ให้เลือกเป็น **GitHub Actions**
-4. กดสร้าง Workflow ใหม่สำหรับ **Static HTML** หรือค้นหาคำว่า **Vite** ในหน้า Actions
-5. หรือใช้ไฟล์ `.github/workflows/deploy.yml` ต่อไปนี้:
+### ข้อมูลสำคัญ
+- **รหัสผ่านเข้าหน้าเมนู:** `darkaura` (ตัวพิมพ์เล็กทั้งหมด)
+- **เทคโนโลยี:** React 19, Vite, Tailwind CSS 4, Motion
 
-```yaml
-name: Deploy to GitHub Pages
+### ฟีเจอร์หลัก (Features)
+- **Aim Assist (ดูดหัว):** ระบบช่วยเล็งล็อกเป้า
+- **Auto Drag (ช่วยลาก):** ระบบช่วยลากเป้าลดแรงดีด
+- **DPI Config:** ปรับความไวเมาส์ (500 - 1000)
+- **144Hz Boost:** ปลดล็อกเฟรมเรตและการแสดงผล
 
-on:
-  push:
-    branches: ["main"]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Set up Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: 'npm'
-      - name: Install dependencies
-        run: npm install
-      - name: Build
-        run: npm run build
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: './dist'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
-```
-
-### 2. เกี่ยวกับรหัสผ่าน (Password)
-รหัสผ่านปัจจุบันถูกตั้งไว้เป็น: `darkaura` (พิมพ์ในช่อง input แล้วกด Authenticate)
-
-### 3. ฟีเจอร์หลัก (Features)
-- **Aim Assist (ดูดหัว):** ระบบช่วยเล็งประสิทธิภาพสูง
-- **Auto Drag (ช่วยลาก):** ระบบลดแรงดีดและช่วยลากเป้า
-- **DPI Config:** ปรับแต่งความเร็วเมาส์เสมือน (500 - 1000)
-- **144Hz Boost:** ปรับแต่งการแสดงผลให้ลื่นไหล
-
-## หมายเหตุ
-โปรเจกต์นี้ถูกสร้างขึ้นเพื่อการเรียนรู้และการปรับแต่ง UI เท่านั้น
+---
+*หมายเหตุ: โปรเจกต์นี้เป็นเพียงการทำ UI/Prototype เพื่อความสวยงามเท่านั้น*
