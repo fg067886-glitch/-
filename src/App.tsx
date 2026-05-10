@@ -280,10 +280,10 @@ export default function App() {
             key="dashboard"
             initial={{ opacity: 0, x: 100 }}
             animate={{ opacity: 1, x: 0 }}
-            className="z-20 w-full max-w-lg p-6 flex flex-col h-full md:h-auto"
+            className="z-20 w-full max-w-lg p-6 flex flex-col max-h-[90vh] overflow-y-auto no-scrollbar"
           >
             {/* Header */}
-            <header className="flex items-center justify-between mb-8">
+            <header className="flex items-center justify-between mb-8 sticky top-0 bg-cyber-dark/80 backdrop-blur-md z-10 py-2">
               <div>
                 <h2 className="text-2xl font-techo font-bold text-neon-cyan tracking-wider uppercase">System Protocol Active</h2>
                 <div className="flex items-center gap-2">
@@ -304,7 +304,7 @@ export default function App() {
             </header>
 
             {/* Main Tiles */}
-            <div className="space-y-4">
+            <div className="space-y-4 pb-6">
               {/* Headshot Toggle */}
               <motion.div 
                 whileHover={{ scale: 1.02 }}
@@ -418,10 +418,13 @@ export default function App() {
                 whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(0, 243, 255, 0.5)' }}
                 whileTap={{ scale: 0.95 }}
                 onClick={startActivation}
-                className="w-full mt-6 py-6 cyber-button bg-neon-cyan text-black font-techo font-bold text-xl tracking-[0.2em] hover:bg-white transition-all shadow-[0_0_30px_rgba(0,243,255,0.3)] flex items-center justify-center gap-3"
+                className="w-full mt-6 py-6 cyber-button bg-neon-cyan text-black font-techo font-bold text-2xl tracking-[0.2em] hover:bg-white transition-all shadow-[0_0_30px_rgba(0,243,255,1)] flex flex-col items-center justify-center"
               >
-                <Zap size={24} className="fill-current" />
-                ACTIVATE PROTOCOL
+                <div className="flex items-center gap-3">
+                  <Zap size={28} className="fill-current" />
+                  <span>กดเพื่อเปิดใช้งาน</span>
+                </div>
+                <span className="text-[10px] opacity-50 font-mono mt-1">TAP TO ACTIVATE PROTOCOL</span>
               </motion.button>
             </div>
 
