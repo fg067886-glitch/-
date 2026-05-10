@@ -203,7 +203,7 @@ export default function App() {
               >
                 <Lock className="text-white w-10 h-10" />
               </motion.div>
-              <h1 className="mt-6 text-4xl font-techo font-bold tracking-widest glitch-text uppercase">Exser Access</h1>
+              <h1 className="mt-6 text-4xl font-techo font-bold tracking-widest glitch-text uppercase">ม้าเม็ด Access</h1>
               <p className="text-gray-400 font-techo tracking-widest mt-2 uppercase text-xs">Enter Authorization Code</p>
             </div>
 
@@ -318,7 +318,7 @@ export default function App() {
             <p className="mt-4 text-[10px] text-gray-500 font-mono tracking-widest uppercase">
               Bypassing Anti-Cheat // Latency: {Math.random() > 0.5 ? '12ms' : '15ms'}
             </p>
-            <p className="mt-2 text-[8px] text-green-500/50 font-mono tracking-tighter uppercase">Exser Aimbot v4.0 Internal Build</p>
+            <p className="mt-2 text-[8px] text-green-500/50 font-mono tracking-tighter uppercase">ม้าเม็ด Aimbot v4.0 Internal Build</p>
           </motion.div>
         ) : (
           <motion.div
@@ -330,7 +330,7 @@ export default function App() {
             {/* Header */}
             <header className="flex items-center justify-between mb-8 sticky top-0 bg-cyber-dark/80 backdrop-blur-md z-10 py-2">
               <div>
-                <h2 className="text-2xl font-techo font-bold text-neon-cyan tracking-wider uppercase">Exser Aimbot Active</h2>
+                <h2 className="text-2xl font-techo font-bold text-neon-cyan tracking-wider uppercase">ม้าเม็ด Aimbot Active</h2>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
@@ -414,7 +414,7 @@ export default function App() {
             </div>
 
             <footer className="mt-8 text-center text-white/20 text-[10px] font-mono tracking-widest uppercase">
-              Exser Pro V4.0 // Build ID: 0x119_BETA
+              ม้าเม็ด Pro V4.0 // Build ID: 0x119_BETA
             </footer>
           </motion.div>
         )}
