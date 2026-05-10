@@ -70,8 +70,22 @@ export default function App() {
     return localStorage.getItem('crosshair_enabled') === 'true';
   });
   const [isPipActive, setIsPipActive] = useState(false);
+  const [pipSupport, setPipSupport] = useState<{ document: boolean; video: boolean }>({ document: false, video: false });
   const [isCrosshairLocked, setIsCrosshairLocked] = useState(false);
   const [isCalibratorMinimized, setIsCalibratorMinimized] = useState(false);
+  
+  useEffect(() => {
+    // @ts-ignore
+    setPipSupport({
+      // @ts-ignore
+      document: !!window.documentPictureInPicture,
+      video: !!document.pictureInPictureEnabled
+    });
+
+    const handlePipExit = () => setIsPipActive(false);
+    document.addEventListener('leavepictureinpicture', handlePipExit);
+    return () => document.removeEventListener('leavepictureinpicture', handlePipExit);
+  }, []);
   const [crosshairPos, setCrosshairPos] = useState(() => {
     const saved = localStorage.getItem('crosshair_pos');
     return saved ? JSON.parse(saved) : { x: 0, y: 0 };
@@ -239,6 +253,13 @@ export default function App() {
       // 2. Fallback to Video Picture-in-Picture (Mobile/Others)
       if (!isPipActive) {
         if (!pipCanvasRef.current || !pipVideoRef.current) return;
+
+        // Check if browser supports picture-in-picture
+        if (!document.pictureInPictureEnabled) {
+          alert("เบราว์เซอร์ของคุณไม่อนุญาตให้ใช้โหมดลอยตัว (PiP) กรุณาใช้ Chrome หรือ Safari เวอร์ชั่นล่าสุด");
+          return;
+        }
+
         const ctx = pipCanvasRef.current.getContext('2d');
         if (ctx) {
           ctx.fillStyle = '#0a0a0a';
@@ -257,10 +278,6 @@ export default function App() {
         await pipVideoRef.current.play();
         // @ts-ignore
         await pipVideoRef.current.requestPictureInPicture();
-        
-        pipVideoRef.current.addEventListener('leavepictureinpicture', () => {
-          setIsPipActive(false);
-        }, { once: true });
 
         setIsPipActive(true);
         synth.current?.playUnlock();
@@ -771,32 +788,43 @@ export default function App() {
                   <p className="text-xs text-gray-500 mt-1 uppercase">ลากเพื่อย้ายตำแหน่งอิสระ (Draggable)</p>
                 </div>
                 {isCrosshairEnabled && (
-                  <div className="flex gap-2">
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        togglePip();
-                      }}
-                      className={`px-3 py-1 rounded text-[8px] font-bold uppercase border transition-all flex items-center gap-1 ${
-                        isPipActive 
-                        ? 'bg-blue-500 text-white border-blue-400 animate-pulse' 
-                        : 'bg-white/5 text-gray-400 border-white/10 hover:text-white'
-                      }`}
-                    >
-                      <MonitorPlay size={10} />
-                      {isPipActive ? 'PIP: ON' : 'Floating'}
-                    </button>
-                    <button 
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setCrosshairPos({ x: 0, y: 0 });
-                        synth.current?.playTap(200);
-                      }}
-                      className="px-2 py-1 bg-green-500/20 text-green-500 rounded text-[8px] font-bold uppercase border border-green-500/30"
-                    >
-                      Reset
-                    </button>
-                  </div>
+                    <div className="flex flex-col items-end gap-1">
+                      <div className="flex gap-2">
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            if (!pipSupport.document && !pipSupport.video) {
+                              alert("อุปกรณ์ของคุณไม่รองรับโหมดลอยตัวทับแอปอื่น (PiP) กรุณาลองใช้บน Chrome Browser");
+                              return;
+                            }
+                            togglePip();
+                          }}
+                          className={`px-3 py-1 rounded text-[8px] font-bold uppercase border transition-all flex items-center gap-1 ${
+                            isPipActive 
+                            ? 'bg-blue-500 text-white border-blue-400 animate-pulse' 
+                            : (pipSupport.document || pipSupport.video) 
+                              ? 'bg-white/5 text-gray-400 border-white/10 hover:text-white'
+                              : 'bg-red-500/10 text-red-500 border-red-500/20 cursor-not-allowed'
+                          }`}
+                        >
+                          <MonitorPlay size={10} />
+                          {!pipSupport.document && !pipSupport.video ? 'Unsupported' : isPipActive ? 'PIP: ON' : 'Floating'}
+                        </button>
+                        <button 
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setCrosshairPos({ x: 0, y: 0 });
+                            synth.current?.playTap(200);
+                          }}
+                          className="px-2 py-1 bg-green-500/20 text-green-500 rounded text-[8px] font-bold uppercase border border-green-500/30"
+                        >
+                          Reset
+                        </button>
+                      </div>
+                      <span className="text-[7px] text-white/30 uppercase tracking-tighter">
+                        {isPipActive ? 'PiP Mode Active' : 'Req. Permission on Open'}
+                      </span>
+                    </div>
                 )}
                 <div className={`w-12 h-6 rounded-full relative transition-colors ${isCrosshairEnabled ? 'bg-green-500' : 'bg-white/10'}`}>
                   <motion.div 
