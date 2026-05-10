@@ -114,16 +114,40 @@ export default function App() {
 
   const launchGame = (type: 'FF' | 'MAX') => {
     synth.current?.playUnlock();
-    // Use deep links for Free Fire and Free Fire Max
-    const schemes = {
-      FF: 'com.dts.freefireth://',
-      MAX: 'com.dts.freefiremax://'
-    };
     
+    const isAndroid = /Android/i.test(navigator.userAgent);
+    
+    // Package Names and Schemes
+    const configs = {
+      FF: {
+        package: 'com.dts.freefireth',
+        scheme: 'freefire://',
+        intent: 'intent://#Intent;scheme=freefire;package=com.dts.freefireth;end'
+      },
+      MAX: {
+        package: 'com.dts.freefiremax',
+        scheme: 'freefiremax://',
+        intent: 'intent://#Intent;scheme=freefiremax;package=com.dts.freefiremax;end'
+      }
+    };
+
     setTimeout(() => {
-      window.location.href = schemes[type];
-      // Fallback message if app not installed
-      alert(`Launching ${type === 'FF' ? 'Free Fire' : 'Free Fire Max'}... หากเกมไม่เปิด กรุณาตรวจสอบว่าติดตั้งเกมไว้ในเครื่องแล้ว`);
+      if (isAndroid) {
+        // Android Intent (Most reliable)
+        window.location.href = configs[type].intent;
+      } else {
+        // iOS or others
+        window.location.href = configs[type].scheme;
+      }
+
+      // Check after a short delay if we are still on the page
+      const timeout = setTimeout(() => {
+        if (confirm(`ระบบส่งคำสั่งเปิด ${type === 'FF' ? 'Free Fire' : 'Free Fire Max'} แล้ว หากเกมไม่เปิดอัตโนมัติ คุณต้องการไปที่ Play Store หรือลองอีกครั้งหรือไม่?`)) {
+          window.location.href = `https://play.google.com/store/apps/details?id=${configs[type].package}`;
+        }
+      }, 2500);
+
+      window.onblur = () => clearTimeout(timeout);
     }, 800);
   };
 
