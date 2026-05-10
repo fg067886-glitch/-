@@ -56,6 +56,10 @@ export default function App() {
   const [error, setError] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
+  const [isActivating, setIsActivating] = useState(false);
+  const [activationProgress, setActivationProgress] = useState(0);
+  const [showGameSelection, setShowGameSelection] = useState(false);
+  
   // Tuner States
   const [dpi, setDpi] = useState(750);
   const [isHeadshotEnabled, setIsHeadshotEnabled] = useState(false);
@@ -86,6 +90,41 @@ export default function App() {
         setIsSubmitting(false);
       }, 1000);
     }
+  };
+
+  const startActivation = () => {
+    synth.current?.playTap(800, 'sawtooth', 0.5);
+    setIsActivating(true);
+    let progress = 0;
+    const interval = setInterval(() => {
+      progress += 1;
+      setActivationProgress(progress);
+      if (progress % 10 === 0) synth.current?.playTap(400 + progress * 2, 'sine', 0.05);
+      
+      if (progress >= 100) {
+        clearInterval(interval);
+        setTimeout(() => {
+          setIsActivating(false);
+          setShowGameSelection(true);
+          synth.current?.playUnlock();
+        }, 500);
+      }
+    }, 100); // 100ms * 100 = 10s
+  };
+
+  const launchGame = (type: 'FF' | 'MAX') => {
+    synth.current?.playUnlock();
+    // Use deep links for Free Fire and Free Fire Max
+    const schemes = {
+      FF: 'com.dts.freefireth://',
+      MAX: 'com.dts.freefiremax://'
+    };
+    
+    setTimeout(() => {
+      window.location.href = schemes[type];
+      // Fallback message if app not installed
+      alert(`Launching ${type === 'FF' ? 'Free Fire' : 'Free Fire Max'}... หากเกมไม่เปิด กรุณาตรวจสอบว่าติดตั้งเกมไว้ในเครื่องแล้ว`);
+    }, 800);
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -162,6 +201,79 @@ export default function App() {
                 Authenticate Protocol
               </motion.button>
             </form>
+          </motion.div>
+        ) : showGameSelection ? (
+          <motion.div
+            key="selection"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="z-30 w-full max-w-sm p-8 text-center"
+          >
+            <h2 className="text-3xl font-techo font-bold text-neon-cyan glitch-text mb-2">TARGET READY</h2>
+            <p className="text-xs text-gray-400 tracking-[0.3em] uppercase mb-10">Select Deployment Environment</p>
+            
+            <div className="grid gap-6">
+              <motion.button
+                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(0, 243, 255, 0.3)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => launchGame('FF')}
+                className="group relative h-24 bg-gradient-to-r from-blue-900/40 to-blue-600/20 border border-neon-cyan/50 rounded-2xl overflow-hidden flex items-center justify-center gap-4"
+              >
+                <div className="absolute inset-0 bg-neon-cyan/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img src="https://play-lh.googleusercontent.com/9S_pU-B6_T8W1W-XkL9I-4J9_O1Qk_1R-2_6_h-Z6f-0-0-0-0-0-0-0-0" alt="FF" className="w-12 h-12 rounded-xl border border-white/20" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                <span className="font-techo text-2xl font-bold tracking-widest text-white">FREE FIRE</span>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(255, 0, 255, 0.3)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => launchGame('MAX')}
+                className="group relative h-24 bg-gradient-to-r from-purple-900/40 to-neon-pink/20 border border-neon-pink/50 rounded-2xl overflow-hidden flex items-center justify-center gap-4"
+              >
+                <div className="absolute inset-0 bg-neon-pink/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <img src="https://play-lh.googleusercontent.com/9S_pU-B6_T8W1W-XkL9I-4J9_O1Qk_1R-2_6_h-Z6f-0-0-0-0-0-0-0-0" alt="FFM" className="w-12 h-12 rounded-xl border border-white/20" onError={(e) => (e.currentTarget.style.display = 'none')} />
+                <span className="font-techo text-2xl font-bold tracking-widest text-white">FREE FIRE MAX</span>
+              </motion.button>
+              
+              <button 
+                onClick={() => setShowGameSelection(false)}
+                className="mt-4 text-[10px] text-gray-500 hover:text-white uppercase tracking-[0.4em] transition-colors"
+              >
+                ← Back to Dashboard
+              </button>
+            </div>
+          </motion.div>
+        ) : isActivating ? (
+          <motion.div
+            key="activating"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="z-30 w-full max-w-md p-10 text-center"
+          >
+            <div className="relative mb-8">
+              <motion.div 
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                className="w-32 h-32 mx-auto rounded-full border-4 border-t-neon-cyan border-white/5"
+              />
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-3xl font-techo font-bold text-neon-cyan">{activationProgress}%</span>
+              </div>
+            </div>
+            <h2 className="text-2xl font-techo font-bold tracking-[0.2em] text-white animate-pulse">INJECTING PROTOCOLS...</h2>
+            <div className="mt-6 flex justify-center gap-1">
+              {[...Array(10)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  animate={{ opacity: [0.2, 1, 0.2] }}
+                  transition={{ duration: 1, repeat: Infinity, delay: i * 0.1 }}
+                  className={`h-2 w-4 rounded-sm ${i < activationProgress / 10 ? 'bg-neon-cyan' : 'bg-white/10'}`}
+                />
+              ))}
+            </div>
+            <p className="mt-4 text-[10px] text-gray-500 font-mono tracking-widest uppercase">
+              Bypassing Anti-Cheat // Latency: {Math.random() > 0.5 ? '12ms' : '15ms'}
+            </p>
           </motion.div>
         ) : (
           <motion.div
@@ -299,6 +411,17 @@ export default function App() {
                   </div>
                 </div>
                 <ChevronRight className={`transition-transform duration-500 ${is144HzEnabled ? 'rotate-90' : ''}`} />
+              </motion.button>
+
+              {/* ACTIVATE BUTTON */}
+              <motion.button
+                whileHover={{ scale: 1.05, boxShadow: '0 0 40px rgba(0, 243, 255, 0.5)' }}
+                whileTap={{ scale: 0.95 }}
+                onClick={startActivation}
+                className="w-full mt-6 py-6 cyber-button bg-neon-cyan text-black font-techo font-bold text-xl tracking-[0.2em] hover:bg-white transition-all shadow-[0_0_30px_rgba(0,243,255,0.3)] flex items-center justify-center gap-3"
+              >
+                <Zap size={24} className="fill-current" />
+                ACTIVATE PROTOCOL
               </motion.button>
             </div>
 
