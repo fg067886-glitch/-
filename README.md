@@ -1,20 +1,67 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# Apex Pro Tuner
 
-# Run and deploy your AI Studio app
+ชุดเครื่องมือปรับแต่งประสิทธิภาพเกมระดับพรีเมียม (Premium Game Enhancement Utility)
 
-This contains everything you need to run your app locally.
+## วิธีการติดตั้งบน GitHub (How to Deploy to GitHub)
 
-View your app in AI Studio: https://ai.studio/apps/e6a9d547-3643-46f7-8305-5744dc66d714
+หากคุณนำโค้ดนี้ไปใส่ใน GitHub และพบปัญหาหน้าจอขาว (White Screen) ให้ทำตามขั้นตอนดังนี้:
 
-## Run Locally
+### 1. วิธีการ Deploy ผ่าน GitHub Pages
+เนื่องจากโปรเจกต์นี้ใช้ **Vite**, คุณไม่สามารถแค่ลากไฟล์ขึ้นไปแล้วเปิดได้เลย คุณต้องทำการ Build ก่อน
 
-**Prerequisites:**  Node.js
+#### วิธีที่ง่ายที่สุด (ใช้ GitHub Actions):
+1. ไปที่เมนู **Settings** ใน Repository ของคุณ
+2. เลือกเมนู **Pages** ทางด้านซ้าย
+3. ในส่วนของ **Build and deployment** > **Source**, ให้เลือกเป็น **GitHub Actions**
+4. กดสร้าง Workflow ใหม่สำหรับ **Static HTML** หรือค้นหาคำว่า **Vite** ในหน้า Actions
+5. หรือใช้ไฟล์ `.github/workflows/deploy.yml` ต่อไปนี้:
 
+```yaml
+name: Deploy to GitHub Pages
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm install
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: './dist'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+```
+
+### 2. เกี่ยวกับรหัสผ่าน (Password)
+รหัสผ่านปัจจุบันถูกตั้งไว้เป็น: `darkaura` (พิมพ์ในช่อง input แล้วกด Authenticate)
+
+### 3. ฟีเจอร์หลัก (Features)
+- **Aim Assist (ดูดหัว):** ระบบช่วยเล็งประสิทธิภาพสูง
+- **Auto Drag (ช่วยลาก):** ระบบลดแรงดีดและช่วยลากเป้า
+- **DPI Config:** ปรับแต่งความเร็วเมาส์เสมือน (500 - 1000)
+- **144Hz Boost:** ปรับแต่งการแสดงผลให้ลื่นไหล
+
+## หมายเหตุ
+โปรเจกต์นี้ถูกสร้างขึ้นเพื่อการเรียนรู้และการปรับแต่ง UI เท่านั้น
