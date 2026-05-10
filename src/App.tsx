@@ -49,7 +49,7 @@ const createSynth = () => {
   };
 };
 
-const PASSWORD_CORRECT = "exservipmod";
+const PASSWORD_CORRECT = "botvip";
 
 export default function App() {
   const [isUnlocked, setIsUnlocked] = useState(false);
@@ -203,7 +203,7 @@ export default function App() {
               >
                 <Lock className="text-white w-10 h-10" />
               </motion.div>
-              <h1 className="mt-6 text-4xl font-techo font-bold tracking-widest glitch-text uppercase">Apex Access</h1>
+              <h1 className="mt-6 text-4xl font-techo font-bold tracking-widest glitch-text uppercase">Exser Access</h1>
               <p className="text-gray-400 font-techo tracking-widest mt-2 uppercase text-xs">Enter Authorization Code</p>
             </div>
 
@@ -242,7 +242,7 @@ export default function App() {
                 whileTap={{ scale: 0.98 }}
                 className="mt-8 w-full py-4 rounded-xl border border-neon-cyan/30 text-neon-cyan font-techo font-bold tracking-widest uppercase hover:bg-neon-cyan/5 text-sm transition-all"
               >
-                Authenticate Protocol
+                Authenticate Aimbot
               </motion.button>
             </form>
           </motion.div>
@@ -304,7 +304,7 @@ export default function App() {
                 <span className="text-3xl font-techo font-bold text-neon-cyan">{activationProgress}%</span>
               </div>
             </div>
-            <h2 className="text-2xl font-techo font-bold tracking-[0.2em] text-white animate-pulse">INJECTING PROTOCOLS...</h2>
+            <h2 className="text-2xl font-techo font-bold tracking-[0.2em] text-white animate-pulse">INJECTING AIMBOT...</h2>
             <div className="mt-6 flex justify-center gap-1">
               {[...Array(10)].map((_, i) => (
                 <motion.div
@@ -318,6 +318,7 @@ export default function App() {
             <p className="mt-4 text-[10px] text-gray-500 font-mono tracking-widest uppercase">
               Bypassing Anti-Cheat // Latency: {Math.random() > 0.5 ? '12ms' : '15ms'}
             </p>
+            <p className="mt-2 text-[8px] text-green-500/50 font-mono tracking-tighter uppercase">Exser Aimbot v4.0 Internal Build</p>
           </motion.div>
         ) : (
           <motion.div
@@ -329,7 +330,7 @@ export default function App() {
             {/* Header */}
             <header className="flex items-center justify-between mb-8 sticky top-0 bg-cyber-dark/80 backdrop-blur-md z-10 py-2">
               <div>
-                <h2 className="text-2xl font-techo font-bold text-neon-cyan tracking-wider uppercase">System Protocol Active</h2>
+                <h2 className="text-2xl font-techo font-bold text-neon-cyan tracking-wider uppercase">Exser Aimbot Active</h2>
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-2">
                     <span className="w-2 h-2 bg-green-500 rounded-full animate-ping" />
@@ -374,8 +375,8 @@ export default function App() {
                   <ShieldCheck size={24} className={isBody98Enabled ? 'animate-pulse' : ''} />
                 </div>
                 <div className="flex-1">
-                  <h3 className="font-techo font-bold uppercase tracking-widest text-green-500">ดูดตัว 98% (Body Lock)</h3>
-                  <p className="text-xs text-gray-500 mt-1 uppercase">Advanced Torso Tracking Protocol</p>
+                  <h3 className="font-techo font-bold uppercase tracking-widest text-green-500">ดูดตัว 98% (Body Aimbot)</h3>
+                  <p className="text-xs text-gray-500 mt-1 uppercase">Advanced Torso Tracking Aimbot</p>
                 </div>
                 <div className={`w-12 h-6 rounded-full relative transition-colors ${isBody98Enabled ? 'bg-green-500' : 'bg-white/10'}`}>
                   <motion.div 
@@ -406,14 +407,14 @@ export default function App() {
               >
                 <div className="flex items-center gap-3">
                   <Zap size={28} className="fill-current" />
-                  <span>กดเพื่อเปิดใช้งาน</span>
+                  <span>กดเพื่อเปิดใช้งานอิมบอท</span>
                 </div>
-                <span className="text-[10px] opacity-50 font-mono mt-1">TAP TO ACTIVATE PROTOCOL</span>
+                <span className="text-[10px] opacity-50 font-mono mt-1">TAP TO ACTIVATE AIMBOT</span>
               </motion.button>
             </div>
 
             <footer className="mt-8 text-center text-white/20 text-[10px] font-mono tracking-widest uppercase">
-              Apex Pro V4.0 // Build ID: 0x119_BETA
+              Exser Pro V4.0 // Build ID: 0x119_BETA
             </footer>
           </motion.div>
         )}
